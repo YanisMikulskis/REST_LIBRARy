@@ -18,15 +18,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
-from author.views import AuthorModelViewSet
+from author.views import AuthorModelViewSet, BookModelViewSet, BiographyModelViewSet, ArticleModelViewSet
 
 
 router = DefaultRouter()
-router.register('author', AuthorModelViewSet)
+router.register('authors', AuthorModelViewSet)
+router.register('biographies', BiographyModelViewSet)
+router.register('articles', ArticleModelViewSet)
+router.register('books', BookModelViewSet)
+
 
 urlpatterns = [
     path('', RedirectView.as_view(url='api/')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include(router.urls))
 ]
