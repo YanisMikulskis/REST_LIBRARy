@@ -15,10 +15,11 @@ class BiographyModelSerializer(ModelSerializer):
         fields = ['text', 'author']
 
 class ArticleModelSerializer(ModelSerializer):
-    author = AuthorModelSerializer()
+    # author = AuthorModelSerializer()
     class Meta:
         model = ArticleModel
-        exclude = ['name']
+        # exclude = ['name']
+        fields = ['name_article', 'author']
 
 class BookModelSerializer(ModelSerializer):
     author = serializers.StringRelatedField(many=True)
