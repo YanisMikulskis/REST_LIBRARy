@@ -29,10 +29,7 @@ router.register('author', AuthorModelViewSet)
 router.register('book', BookModelViewSet)
 router.register('biography', BiographyModelViewSet)
 router.register('article', ArticleModelViewSet)
-#
-# router.register('biographies', BiographyModelViewSet)
-# router.register('articles', ArticleModelViewSet)
-# router.register('books', BookModelViewSet)
+
 
 
 urlpatterns = [
@@ -41,18 +38,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include(router.urls)),
 
-
-
-
-    # path('api/create/', AuthorCreateAPIView.as_view()),
-    # path('api/list/', AuthorListAPIView.as_view()),
-    # path('api/retrieve/<int:pk>/', AuthorRetrieveAPIView.as_view()),
-    # path('api/destroy/<int:pk>/', AuthorDestroyAPIView.as_view()),
-    # path('api/update/<int:pk>/', AuthorUpdateAPIView.as_view()
-
-    # path('api/filters/', include(router.urls))
-    # path('api/<str:name>/', AuthorModelViewSet.as_view()),
-    # path('api/viewsets/', include(router.urls),
-    # path'api/viewsets/<int:pk>/'
 
 ]
