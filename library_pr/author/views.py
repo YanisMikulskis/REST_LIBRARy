@@ -169,6 +169,7 @@ from .filters import AuthorFilter, BookFilter, BiographyFilter, ArticleFilter
 class AuthorModelViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,
+                         mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = AuthorModel.objects.all()

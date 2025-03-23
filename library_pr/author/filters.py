@@ -14,7 +14,7 @@ class BookFilter(filters.FilterSet):
 
     class Meta:
         model = BookModel
-        fields = ['author']
+        fields = ['authors']
 
 
 class BiographyFilter(filters.FilterSet):

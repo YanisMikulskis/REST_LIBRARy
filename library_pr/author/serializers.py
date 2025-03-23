@@ -22,7 +22,7 @@ class ArticleModelSerializer(ModelSerializer):
         fields = ['name_article', 'author']
 
 class BookModelSerializer(ModelSerializer):
-    author = serializers.StringRelatedField(many=True)
+    # authors = serializers.StringRelatedField(many=True) проблема была в этом
     class Meta:
         model = BookModel
         fields = '__all__'
