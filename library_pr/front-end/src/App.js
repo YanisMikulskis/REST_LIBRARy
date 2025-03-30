@@ -21,7 +21,7 @@ class App extends React.Component {
         const author1 = {id: 1, first_name: 'Александр', last_name: 'Грин',  birthday_year: 1880}
         const author2 = {id: 2, first_name: 'Александр', last_name: 'Пушкин', birthday_year: 1799}
         const authors = [author1, author2]
-        // const authors = [author1,author2]
+
         const book1 = {id: 1, name_book: 'Алые паруса', author: author1.id}
         const book2 = {id: 2, name_book: 'Золотая цепь', author: author1.id}
         const book3 = {id: 3, name_book: 'Пиковая дама', author: author2.id}

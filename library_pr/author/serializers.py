@@ -22,7 +22,11 @@ class ArticleModelSerializer(ModelSerializer):
         fields = ['name_article', 'author']
 
 class BookModelSerializer(ModelSerializer):
-    author = serializers.StringRelatedField(many=True)
+    # authors = serializers.StringRelatedField(many=True) проблема была в этом
+    def validate(self, attrs): #данные = {'name_book': 'fdsfkk', 'authors': [<AuthorModel: Автор Иван Иванов>, <AuthorModel: Автор Пётр Сергеев>, <AuthorModel: Автор Виктор Иванов>]}
+
+        print(f'данные = {attrs}')
+        return attrs
     class Meta:
         model = BookModel
         fields = '__all__'

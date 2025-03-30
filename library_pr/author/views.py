@@ -169,6 +169,7 @@ from .filters import AuthorFilter, BookFilter, BiographyFilter, ArticleFilter
 class AuthorModelViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,
+                         mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = AuthorModel.objects.all()
@@ -178,20 +179,22 @@ class AuthorModelViewSet(mixins.ListModelMixin,
     filterset_class = AuthorFilter
 
 
-class BookModelViewSet(mixins.ListModelMixin,
-                       mixins.CreateModelMixin,
-                       viewsets.GenericViewSet):
+# class BookModelViewSet(mixins.ListModelMixin,
+#                        mixins.CreateModelMixin,
+#                        viewsets.GenericViewSet):
+class BookModelViewSet(ModelViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    queryset = BookModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
+    queryset = BookModel.objects.all()
     serializer_class = BookModelSerializer
     pagination_class = BookLimitPagination
     filterset_class = BookFilter
-
+#
 
 class BiographyModelViewSet(mixins.ListModelMixin,
                             mixins.RetrieveModelMixin,
-                            viewsets.GenericViewSet):
+                            mixins.CreateModelMixin,
+                            viewsets.GenericViewSet,):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = BiographyModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
@@ -201,6 +204,7 @@ class BiographyModelViewSet(mixins.ListModelMixin,
 
 
 class ArticleModelViewSet(mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
                             viewsets.GenericViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = ArticleModel.objects.all()
