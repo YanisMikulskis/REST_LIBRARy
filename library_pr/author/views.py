@@ -164,13 +164,37 @@ from .filters import AuthorFilter, BookFilter, BiographyFilter, ArticleFilter
 #     pagination_class = ArticleLimitPagination
 #     filterset_fields = ['author']
 # Create your views here.
+from rest_framework.permissions import (
+    AllowAny,
+    BasePermission,IsAuthenticatedOrReadOnly,
+    DjangoModelPermissions,
+    IsAuthenticatedOrReadOnly,
+DjangoModelPermissionsOrAnonReadOnly)
 
+
+
+# class AllUsers(BasePermission):
+#     def has_permission(self, request, view):
+#         return True
+class StaffOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_staff
 #------------------
+
+
+class CastomPermissions(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return AllowAny().has_permission(request, view)
+        return jangoModelPermissions().has_permission(request, view)
+
 class AuthorModelViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
+                         mixins.CreateModelMixin,
                          mixins.UpdateModelMixin,
                          mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = AuthorModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
@@ -178,11 +202,8 @@ class AuthorModelViewSet(mixins.ListModelMixin,
     pagination_class = AuthorLimitPagination
     filterset_class = AuthorFilter
 
-
-# class BookModelViewSet(mixins.ListModelMixin,
-#                        mixins.CreateModelMixin,
-#                        viewsets.GenericViewSet):
 class BookModelViewSet(ModelViewSet):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     queryset = BookModel.objects.all()
@@ -195,6 +216,7 @@ class BiographyModelViewSet(mixins.ListModelMixin,
                             mixins.RetrieveModelMixin,
                             mixins.CreateModelMixin,
                             viewsets.GenericViewSet,):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly] # данная категория прав настраивается в админке на каждого юзера
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = BiographyModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
@@ -205,7 +227,8 @@ class BiographyModelViewSet(mixins.ListModelMixin,
 
 class ArticleModelViewSet(mixins.ListModelMixin,
                           mixins.CreateModelMixin,
-                            viewsets.GenericViewSet):
+                        viewsets.GenericViewSet):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = ArticleModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
