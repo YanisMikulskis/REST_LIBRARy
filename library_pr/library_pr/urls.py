@@ -20,12 +20,11 @@ from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 from author.views import AuthorModelViewSet, BookModelViewSet, BiographyModelViewSet, ArticleModelViewSet
 from author.views import *
-
+from rest_framework.authtoken import views
 
 
 router = DefaultRouter()
 router.register('author', AuthorModelViewSet)
-
 router.register('book', BookModelViewSet)
 router.register('biography', BiographyModelViewSet)
 router.register('article', ArticleModelViewSet)
@@ -37,6 +36,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include(router.urls)),
-
+    path('api-token-auth/', views.obtain_auth_token)
 
 ]
