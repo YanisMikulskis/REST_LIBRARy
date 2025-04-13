@@ -6,6 +6,8 @@ import BookList from "./components/Book.js"
 import AuthorBookList from "./components/AuthorBook";
 import {Route, Link, BrowserRouter, Redirect, Switch} from "react-router-dom"
 
+import axios from 'axios'
+
 
 const NotFound404 = ({ location }) => {
     return (
@@ -17,22 +19,51 @@ const NotFound404 = ({ location }) => {
 class App extends React.Component {
     constructor(props) {
         super(props)
-
-        const author1 = {id: 1, first_name: 'Александр', last_name: 'Грин',  birthday_year: 1880}
-        const author2 = {id: 2, first_name: 'Александр', last_name: 'Пушкин', birthday_year: 1799}
-        const authors = [author1, author2]
-
-        const book1 = {id: 1, name_book: 'Алые паруса', author: author1.id}
-        const book2 = {id: 2, name_book: 'Золотая цепь', author: author1.id}
-        const book3 = {id: 3, name_book: 'Пиковая дама', author: author2.id}
-        const book4 = {id: 4, name_book: 'Руслан и Людмила', author: author2.id}
-        const books = [book1, book2, book3, book4]
-        // const books = [4,5,6]
         this.state = {
-            'authors': authors,
-            'books': books
+            'authors': [],
+            'books': []
         }
     }
+    load_data() {
+        axios.get('http://127.0.0.1:8000/api/author/')
+            .then(response => {
+                this.setState({'authors': response.data.results})
+                console.log('jkjlkk')
+                console.log(response.data)
+            }).catch(error => console.log(error))
+
+
+        axios.get('http://127.0.0.1:8000/api/book/')
+            .then(response => {
+                this.setState({'books': response.data.results})
+                console.log('j009990')
+                console.log(response.data)
+                console.log(response.data.results.authors)
+            }).catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        this.load_data()
+    }
+
+
+// ---------
+//         const author1 = {id: 1, first_name: 'Александр', last_name: 'Грин',  birthday_year: 1880}
+//         const author2 = {id: 2, first_name: 'Александр', last_name: 'Пушкин', birthday_year: 1799}
+//         const authors = [author1, author2]
+//
+//         const book1 = {id: 1, name_book: 'Алые паруса', author: author1.id}
+//         const book2 = {id: 2, name_book: 'Золотая цепь', author: author1.id}
+//         const book3 = {id: 3, name_book: 'Пиковая дама', author: author2.id}
+//         const book4 = {id: 4, name_book: 'Руслан и Людмила', author: author2.id}
+//         const books = [book1, book2, book3, book4]
+//         // const books = [4,5,6]
+//         this.state = {
+//             'authors': authors,
+//             'books': books
+//         }
+// ---------
+
 
     render() {
         return (
@@ -49,11 +80,11 @@ class App extends React.Component {
                         </ul>
                     </nav>
                     <Switch>
-                    <Route exact path='/' render={(props) => <AuthorList authors={this.state.authors} {...props} />} />
+                    <Route exact path='/authors' render={(props) => <AuthorList authors={this.state.authors} {...props} />} />
                     <Route exact path='/books' render={(props) => <BookList books={this.state.books} {...props} />} />
-                    <Route path='/author/:id' render={(props) => <AuthorBookList books={this.state.books} {...props} />} />
+                    <Route path='/authors/:id' render={(props) => <AuthorBookList books={this.state.books} {...props} />} />
 
-                    <Redirect from='/authors' to='/' />
+                    <Redirect from='/' to='/authors' />
                     <Route component={NotFound404} />
                     </Switch>
                 </BrowserRouter>

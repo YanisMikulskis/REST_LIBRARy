@@ -14,7 +14,7 @@ const AuthorBookItem = ({book}) => {
 const AuthorBookList = ({books}) => {
 
     let { id } = useParams();
-    let filtered_books = books.filter((book) => book.author === Number(id))
+    let filtered_books = books.filter((book) => book.authors === Number(id))
     return (
         <table>
             <thead>
