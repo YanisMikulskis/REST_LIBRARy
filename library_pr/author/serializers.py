@@ -9,13 +9,13 @@ class AuthorModelSerializer(ModelSerializer):
         fields = '__all__'
 
     # Если сериализатор используется вложенно — изменяем поля
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.context.get('nested', False):
-            allowed = {'first_name'}
-            existing = set(self.fields)
-            for field in existing - allowed:
-                self.fields.pop(field)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     if self.context.get('nested', False):
+    #         allowed = {'first_name'}
+    #         existing = set(self.fields)
+    #         for field in existing - allowed:
+    #             self.fields.pop(field)
 
 
 
@@ -38,7 +38,7 @@ class ArticleModelSerializer(ModelSerializer):
 class BookModelSerializer(ModelSerializer):
     # authors = serializers.StringRelatedField(many=True) проблема была в этом
     # authors = AuthorModelSerializer(many=True, read_only=True)
-    authors = serializers.SerializerMethodField()
+    # authors = serializers.SerializerMethodField()
     def validate(self, attrs): #данные = {'name_book': 'fdsfkk', 'authors': [<AuthorModel: Автор Иван Иванов>, <AuthorModel: Автор Пётр Сергеев>, <AuthorModel: Автор Виктор Иванов>]}
 
         print(f'данные = {attrs}')
@@ -56,6 +56,6 @@ class BookModelSerializer(ModelSerializer):
         # # print([AuthorModel.objects.get(id=list(i.values())[0]) for i in authors])
         # print(names)
         fields = '__all__'
-    def get_authors(self, obj):
-        serializer = AuthorModelSerializer(obj.authors.all(), many=True, context={'nested': True})
-        return serializer.data
+    # def get_authors(self, obj):
+    #     serializer = AuthorModelSerializer(obj.authors.all(), many=True, context={'nested': True})
+    #     return serializer.data

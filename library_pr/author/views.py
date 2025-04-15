@@ -169,24 +169,30 @@ from rest_framework.permissions import (
     BasePermission,IsAuthenticatedOrReadOnly,
     DjangoModelPermissions,
     IsAuthenticatedOrReadOnly,
-DjangoModelPermissionsOrAnonReadOnly)
+    DjangoModelPermissionsOrAnonReadOnly,
+    IsAuthenticated)
 
 
 
 # class AllUsers(BasePermission):
 #     def has_permission(self, request, view):
 #         return True
+
+from rest_framework.authentication import TokenAuthentication
+
+# class CjeckToken(BasePermission):
+
 class StaffOnly(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_staff
 #------------------
 
 
-class CastomPermissions(BasePermission):
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            return AllowAny().has_permission(request, view)
-        return jangoModelPermissions().has_permission(request, view)
+# class CustomPermissions(BasePermission):
+#     def has_permission(self, request, view):
+#         if not request.user.is_authenticated:
+#             return AllowAny().has_permission(request, view)
+#         return DjangoModelPermissions().has_permission(request, view)
 
 class AuthorModelViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
@@ -203,7 +209,8 @@ class AuthorModelViewSet(mixins.ListModelMixin,
     filterset_class = AuthorFilter
 
 class BookModelViewSet(ModelViewSet):
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [IsAuthenticated]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     queryset = BookModel.objects.all()
@@ -217,6 +224,7 @@ class BiographyModelViewSet(mixins.ListModelMixin,
                             mixins.CreateModelMixin,
                             viewsets.GenericViewSet,):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly] # данная категория прав настраивается в админке на каждого юзера
+
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = BiographyModel.objects.all()
     parser_classes = [JSONParser, FormParser, MultiPartParser]
