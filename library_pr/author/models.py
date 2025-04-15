@@ -23,7 +23,7 @@ class BookModel(models.Model):
     authors = models.ManyToManyField(AuthorModel, verbose_name='Авторы')
 
     def __str__(self):
-        return f'Книга {self.name} авторы {self.authors}'
+        return f'Книга {self.name_book} авторы {self.authors}'
 class ArticleModel(models.Model):
     name_article = models.CharField(max_length=256,verbose_name='Название статьи')
     author = models.ForeignKey(AuthorModel, on_delete=models.PROTECT, verbose_name='Автор статьи')

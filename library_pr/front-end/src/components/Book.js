@@ -28,7 +28,7 @@ const BookList = ({books}) => {
               name_book
           </th>
           <th>
-              author
+              authors
           </th>
 
           {books.map((book) => <BookItem book={book} />)}
