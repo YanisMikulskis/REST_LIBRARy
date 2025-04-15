@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 from author.views import AuthorModelViewSet, BookModelViewSet, BiographyModelViewSet, ArticleModelViewSet
 from author.views import *
 from rest_framework.authtoken import views
+# from rest_framework.authtoken.views import C
 
 
 router = DefaultRouter()
@@ -37,5 +38,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include(router.urls)),
     path('api-token-auth/', views.obtain_auth_token)
+    # path('api/token', views.)
 
 ]
