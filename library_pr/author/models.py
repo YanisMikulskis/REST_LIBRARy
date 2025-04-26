@@ -10,6 +10,9 @@ class AuthorModel(models.Model):
     def __str__(self):
         return f'Автор {self.first_name} {self.last_name}'
 
+    class Meta:
+        app_label = 'author'
+
 
 class BiographyModel(models.Model):
     text = models.TextField(verbose_name=f'Текст биографии')
