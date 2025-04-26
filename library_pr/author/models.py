@@ -7,11 +7,12 @@ class AuthorModel(models.Model):
     last_name = models.CharField(max_length=64, default='Test surname', verbose_name='Фамилия автора')
     birthday_year = models.PositiveIntegerField(verbose_name='Год рождения автора')
 
+    class Meta:
+        app_label = 'author'
     def __str__(self):
         return f'Автор {self.first_name} {self.last_name}'
 
-    class Meta:
-        app_label = 'author'
+
 
 
 class BiographyModel(models.Model):

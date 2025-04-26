@@ -6,7 +6,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate, APIClient
 from mixer.backend.django import mixer
 from django.contrib.auth.models import User
 from .views import AuthorModelViewSet
-from .models import AuthorModel, BookModel
+# from .models import AuthorModel, BookModel
 
 
 class TestAuthorViewSet(TestCase):
