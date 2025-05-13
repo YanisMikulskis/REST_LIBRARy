@@ -42,11 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
     'author',
+    'userapp_library',
     'corsheaders',
     'django_filters',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
@@ -134,6 +137,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # from rest_framework.permissions import IsAuthenticated
 REST_FRAMEWORK = {
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_VERSION': '0.1',
+    'ALLOWED_VERSIONS': ('0.1', '0.2'),
+    'VERSION_PARAM': 'version',
     'DEFAULT_RENDERER_CLASSES':[
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
