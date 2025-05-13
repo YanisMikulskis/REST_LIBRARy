@@ -8,22 +8,11 @@ class AuthorModelSerializer(ModelSerializer):
         model = AuthorModel
         fields = '__all__'
 
-    # Если сериализатор используется вложенно — изменяем поля
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     if self.context.get('nested', False):
-    #         allowed = {'first_name'}
-    #         existing = set(self.fields)
-    #         for field in existing - allowed:
-    #             self.fields.pop(field)
 
-class BookSerializerBase(serializers.ModelSerializer):
+class AuthorModelSerializerBase(ModelSerializer):
     class Meta:
-        model = BookModel
-        fields = '__all__'
-
-
-
+        model = AuthorModel
+        fields = ('first_name',)
 
 
 class BiographyModelSerializer(ModelSerializer):
@@ -32,16 +21,21 @@ class BiographyModelSerializer(ModelSerializer):
         fields = ['text', 'author']
 
 class ArticleModelSerializer(ModelSerializer):
-    # author = AuthorModelSerializer()
     class Meta:
         model = ArticleModel
-        # exclude = ['name']
         fields = ['name_article', 'author']
+
+
+
 
 class BookModelSerializer(ModelSerializer):
     authors = AuthorModelSerializer(many=True)
-    # def validate(self, attrs):
-    #     return attrs
+    class Meta:
+        model = BookModel
+        fields = '__all__'
+
+class BookModelSerializerBase(ModelSerializer):
+    authors = AuthorModelSerializerBase(many=True)
     class Meta:
         model = BookModel
         fields = '__all__'
