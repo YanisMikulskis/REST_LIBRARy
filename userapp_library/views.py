@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-class UserListAPIView(generics.ListAPIView):
+class UserModelViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -14,6 +14,14 @@ class UserListAPIView(generics.ListAPIView):
             return UserSerializerFull
         return UserSerializer
 
+# class UserListAPIView(generics.ListAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def get_serializer_class(self):
+#         if self.request.version == '0.2':
+#             return UserSerializerFull
+#         return UserSerializer
 
 
 # class UserListAPIView(APIView):
