@@ -17,14 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import RedirectView
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.routers import DefaultRouter
 from author.views import AuthorModelViewSet, BookModelViewSet, BiographyModelViewSet, ArticleModelViewSet
 from author.views import *
 from rest_framework.permissions import AllowAny
-from userapp_library.views import UserListAPIView
+from userapp_library.views import UserModelViewSet
 from rest_framework.authtoken import views
 # from rest_framework.authtoken.views import C
-
+from graphene_django.views import GraphQLView
 
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -50,7 +51,11 @@ router.register('author', AuthorModelViewSet)
 router.register('book', BookModelViewSet)
 router.register('biography', BiographyModelViewSet)
 router.register('article', ArticleModelViewSet)
-# router.register('user', UserListAPIView)
+router.register('user', UserModelViewSet, basename='user')
+
+user_router_ver = DefaultRouter()
+user_router_ver.register('', UserModelViewSet, basename='versioned-user')
+
 
 
 
@@ -58,23 +63,21 @@ urlpatterns = [
     path('', RedirectView.as_view(url='api/')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/', include(router.urls)),
     path('api-token-auth/', views.obtain_auth_token),
+    path('api/', include(
+        [path('', include(router.urls)),
+         path('user/', include((user_router_ver.urls, 'userapp_library'), namespace='0.1'))
+         ])),
+
+    path('api/user/ver/0.1', include((user_router_ver.urls, 'userapp_library'), namespace='0.1')),
+    path('api/user/ver/0.2',  include((user_router_ver.urls, 'userapp_library'), namespace='0.2')),
 
 
-
-
-    # path('api/<str:version>/user/', UserListAPIView.as_view(), name='user')
-
-
-    # path('api/users/0.1', include('userapp_library.urls', namespace='0.1')),
-    # path('api/users/0.2', include('userapp_library.urls', namespace='0.2'))
-    path('api/users/', UserListAPIView.as_view(), name = 'user'),
-    # path('api/token', views.)
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True)))
 
 
 
