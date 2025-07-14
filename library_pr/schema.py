@@ -32,7 +32,7 @@ class Query(graphene.ObjectType):
     def resolve_author_by_id(self, info, id):
         try:
             return AuthorModel.objects.get(id=id)
-        except AuthorModel.DoesNotExists:
+        except AuthorModel.DoesNotExist:
             return None
 
     def resolve_books_by_author_name(self, info, name_author=None):

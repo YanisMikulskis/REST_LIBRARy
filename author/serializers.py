@@ -35,7 +35,8 @@ class BookModelSerializer(ModelSerializer):
         fields = '__all__'
 
 class BookModelSerializerBase(ModelSerializer):
-    authors = AuthorModelSerializerBase(many=True)
+    # authors = AuthorModelSerializerBase(many=True)
+    authors = serializers.PrimaryKeyRelatedField(many=True, queryset=AuthorModel.objects.all())
     class Meta:
         model = BookModel
         fields = '__all__'

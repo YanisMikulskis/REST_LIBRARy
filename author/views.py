@@ -61,7 +61,7 @@ class AuthorModelViewSet(mixins.ListModelMixin,
 
 class BookModelViewSet(ModelViewSet):
     # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     queryset = BookModel.objects.all()
