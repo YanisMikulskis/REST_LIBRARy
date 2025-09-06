@@ -1,15 +1,14 @@
-import logo from './logo.svg'
 import './App.css'
 import React from "react"
 import AuthorList from "./components/Author.js"
 import BookList from "./components/Book.js"
 import AuthorBookList from "./components/AuthorBook";
-import AuthorBook from "./components/AuthorBook";
-import {Route, Link, BrowserRouter, Redirect, Switch} from "react-router-dom"
+import {BrowserRouter, Link, Redirect, Route, Switch} from "react-router-dom"
 
 import axios from 'axios'
 import LoginForm from "./components/Auth";
 import Cookies from "universal-cookie";
+import BookForm from "./components/BookForm";
 
 const NotFound404 = ({ location }) => {
     return (
@@ -27,6 +26,11 @@ class App extends React.Component {
             'token': ''
         }
     }
+
+
+
+
+
 
     set_token(token) {
         const cookies = new Cookies()
@@ -48,7 +52,7 @@ class App extends React.Component {
     }
 
     get_token(username, password) {
-        axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username,
+        axios.post('http://127.0.0.1:8001/api-token-auth/', {username: username,
             password: password})
             .then(response => {
                 this.set_token(response.data['token'])
@@ -69,20 +73,15 @@ class App extends React.Component {
 
     load_data() {
         const headers = this.get_headers()
-        axios.get('http://127.0.0.1:8000/api/author/', {headers})
+        axios.get('http://127.0.0.1:8001/api/author/', {headers})
             .then(response => {
                 this.setState({'authors': response.data.results})
-                console.log('jkjlkk')
-                console.log(response.data)
             }).catch(error => console.log(error))
 
 
-        axios.get('http://127.0.0.1:8000/api/book/', {headers})
+        axios.get('http://127.0.0.1:8001/api/book/', {headers})
             .then(response => {
                 this.setState({'books': response.data.results})
-                console.log('j009990')
-                console.log(response.data)
-                console.log(response.data.results.authors)
             }).catch(error => {
                 console.log(error)
                 this.setState({books: []})
@@ -94,6 +93,36 @@ class App extends React.Component {
         // this.load_data()
     }
 
+    deleteBook(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8001/api/book/${id}/`, {headers: headers})
+            .then(response => {
+                this.setState({books: this.state.books.filter((book)=>book.id !== id)})
+
+            }).catch(error => console.log(error))
+    }
+
+
+
+
+
+    createBook(name_book, authors) {
+        const headers = this.get_headers()
+        const data = {name_book:name_book, authors:authors}
+        console.log('fsdfsfsfssd')
+        console.log(data)
+        axios.post('http://127.0.0.1:8001/api/book/', data, {headers: headers})
+            .then(response => {
+                // let new_book = response.data
+                // new_book.authors = this.state.authors.filter((author) => new_book.authors.includes(author.id))
+                //
+                // this.setState({books: [...this.state.books, new_book]})
+                this.load_data()
+            }).catch(error => console.log(error))
+
+
+
+    }
 
 
 
@@ -118,9 +147,14 @@ class App extends React.Component {
                     </nav>
                     <Switch>
                     <Route exact path='/authors' render={(props) => <AuthorList authors={this.state.authors} {...props} />} />
-                    <Route exact path='/books' render={(props) => <BookList books={this.state.books} {...props} />} />
+                    <Route exact path='/books' render={(props) => <BookList books={this.state.books} deleteBook={(id) => this.deleteBook(id)} {...props} />} />
                     <Route exact path='/login' render={(props) => <LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
                     <Route path='/authors/:id' render={(props) => <AuthorBookList books={this.state.books} authors={this.state.authors} {...props} />} />
+                    <Route exact path='/books/create' component={ () => <BookForm authors={this.state.authors}
+                                                                                  createBook={(name_book, authors) => this.createBook(name_book, authors)}/>}
+                        />
+
+
 
                     <Redirect from='/' to='/authors' />
                     <Route component={NotFound404} />
@@ -131,55 +165,6 @@ class App extends React.Component {
         )
     }
 }
-  //   this.state = {
-  //     'authors': []
-  //   }
-  // }
-  //
-  // componentDidMount() {
-  //   axios.get('http://127.0.0.1:8000/api/author')
-  //       .then(response => {
-  //         const authors = response.data.results
-  //         this.setState(
-  //             {
-  //               'authors': authors
-  //             }
-  //         )
-  //       }).catch(error => console.log(error))
-  //
-  // }
-  //
-  // render() {
-  //   return (
-  //       <div>
-  //         <AuthorList authors={this.state.authors}/>
-  //       </div>
-
-
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-
 
 
 export default App;
