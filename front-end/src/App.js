@@ -52,7 +52,7 @@ class App extends React.Component {
     }
 
     get_token(username, password) {
-        axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username,
+        axios.post('http://127.0.0.1:8001/api-token-auth/', {username: username,
             password: password})
             .then(response => {
                 this.set_token(response.data['token'])
@@ -73,18 +73,15 @@ class App extends React.Component {
 
     load_data() {
         const headers = this.get_headers()
-        axios.get('http://127.0.0.1:8000/api/author/', {headers})
+        axios.get('http://127.0.0.1:8001/api/author/', {headers})
             .then(response => {
                 this.setState({'authors': response.data.results})
-                console.log(response.data)
             }).catch(error => console.log(error))
 
 
-        axios.get('http://127.0.0.1:8000/api/book/', {headers})
+        axios.get('http://127.0.0.1:8001/api/book/', {headers})
             .then(response => {
                 this.setState({'books': response.data.results})
-                console.log(response.data)
-                console.log(response.data.results.authors)
             }).catch(error => {
                 console.log(error)
                 this.setState({books: []})
@@ -98,7 +95,7 @@ class App extends React.Component {
 
     deleteBook(id) {
         const headers = this.get_headers()
-        axios.delete(`http://127.0.0.1:8000/api/book/${id}/`, {headers: headers})
+        axios.delete(`http://127.0.0.1:8001/api/book/${id}/`, {headers: headers})
             .then(response => {
                 this.setState({books: this.state.books.filter((book)=>book.id !== id)})
 
@@ -114,7 +111,7 @@ class App extends React.Component {
         const data = {name_book:name_book, authors:authors}
         console.log('fsdfsfsfssd')
         console.log(data)
-        axios.post('http://127.0.0.1:8000/api/book/', data, {headers: headers})
+        axios.post('http://127.0.0.1:8001/api/book/', data, {headers: headers})
             .then(response => {
                 // let new_book = response.data
                 // new_book.authors = this.state.authors.filter((author) => new_book.authors.includes(author.id))
